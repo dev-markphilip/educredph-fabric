@@ -89,6 +89,7 @@ function generateOrg3() {
     fi
 
     infoln "Generating certificates using Fabric CA"
+    #docker-compose -f compose/compose-ca-org3.yaml -f compose/docker/docker-compose-ca-org3.yaml
     ${CONTAINER_CLI_COMPOSE} -f ${COMPOSE_FILE_CA_BASE} -f $COMPOSE_FILE_CA_ORG3 up -d 2>&1
 
     . fabric-ca/registerEnroll.sh
@@ -175,8 +176,8 @@ function networkDown () {
     ./network.sh down
 }
 
-# Using crpto vs CA. default is cryptogen
-CRYPTO="cryptogen"
+# Using crpto vs CA. default is CA
+CRYPTO="Certificate Authorities"
 # timeout duration - the duration the CLI should wait for a response from
 # another container before giving up
 CLI_TIMEOUT=10
