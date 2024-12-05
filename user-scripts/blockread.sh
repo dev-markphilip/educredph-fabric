@@ -1,5 +1,6 @@
-echo "from readasset"
+#!/bin/bash
 
+echo "here"
 export PATH=${PWD}/../bin:$PATH
 
 export FABRIC_CFG_PATH=$PWD/../config/
@@ -12,11 +13,15 @@ export CORE_PEER_TLS_ROOTCERT_FILE=${PWD}/organizations/peerOrganizations/org1.e
 export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/org1.educredph.com/users/Admin@org1.educredph.com/msp
 export CORE_PEER_ADDRESS=localhost:7051
 
+CHANNEL_NAME="mychannel"
+BLOCK_NUM=6
 
-echo $CORE_PEER_LOCALMSPID;
 
+# Fetch the block
+peer channel fetch $BLOCK_NUM block_${BLOCK_NUM}.pb -c $CHANNEL_NAME
 
-peer chaincode query -C mychannel -n basic -c '{"Args":["GetAllAssets"]}' | jq
-peer chaincode query -C mychannel -n basic -c '{"function":"ReadAsset","Args":["cred-1733304297107"]}'
-peer chaincode query -C mychannel -n basic -c '{"Args":["queryByTxID", "ee8d1feb72701beddfcbcf6ea089578f59316f65ba27fe80495c01c1c6e1ab0f"]}'
+# Decode the block
+curl -X POST --data-binary @block_${BLOCK_NUM}.pb http://localhost:7059/protolator/decode/common.Block > block_${BLOCK_NUM}.json
 
+# Display transaction details
+jq '.data.data[] | .payload' block_${BLOCK_NUM}.json

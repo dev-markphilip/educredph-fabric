@@ -1,5 +1,4 @@
-echo "from readasset"
-
+# echo "{xxx}";
 export PATH=${PWD}/../bin:$PATH
 
 export FABRIC_CFG_PATH=$PWD/../config/
@@ -13,10 +12,4 @@ export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/org1.educr
 export CORE_PEER_ADDRESS=localhost:7051
 
 
-echo $CORE_PEER_LOCALMSPID;
-
-
-peer chaincode query -C mychannel -n basic -c '{"Args":["GetAllAssets"]}' | jq
-peer chaincode query -C mychannel -n basic -c '{"function":"ReadAsset","Args":["cred-1733304297107"]}'
-peer chaincode query -C mychannel -n basic -c '{"Args":["queryByTxID", "ee8d1feb72701beddfcbcf6ea089578f59316f65ba27fe80495c01c1c6e1ab0f"]}'
-
+peer channel getinfo -c mychannel
